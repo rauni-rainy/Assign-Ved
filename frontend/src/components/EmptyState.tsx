@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function EmptyState() {
   return (
@@ -12,10 +13,10 @@ export default function EmptyState() {
         submissions. You can set up rubrics, define marking criteria, and let AI<br className="hidden md:block" />
         assist with grading.
       </p>
-      <button className="bg-gray-900 text-white border-none rounded-full py-3 px-6 text-sm font-semibold flex items-center gap-2 cursor-pointer transition-all hover:bg-black active:scale-95 shadow-sm">
+      <Link href="/create" className="bg-gray-900 text-white border-none rounded-full py-3 px-6 text-sm font-semibold flex items-center gap-2 cursor-pointer transition-all hover:bg-black active:scale-95 shadow-sm no-underline">
         <span className="material-symbols-rounded text-xl">add</span>
         Create Your First Assignment
-      </button>
+      </Link>
     </section>
   );
 }

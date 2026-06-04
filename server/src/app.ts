@@ -1,0 +1,30 @@
+import express from 'express';
+import cors from 'cors';
+import { env } from './config/env';
+import { errorHandler } from './middleware/errorHandler';
+
+import healthRoutes from './routes/health';
+import assignmentRoutes from './routes/assignments';
+import questionPaperRoutes from './routes/questionPapers';
+
+const app = express();
+
+// Middleware
+app.use(cors({
+  origin: env.FRONTEND_URL,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Routes
+app.use('/api/health', healthRoutes);
+app.use('/api/assignments', assignmentRoutes);
+app.use('/api/question-papers', questionPaperRoutes);
+
+// Global Error Handler
+app.use(errorHandler);
+
+export { app };
