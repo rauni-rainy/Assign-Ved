@@ -72,7 +72,7 @@ export default function Sidebar({
           Settings
         </Link>
         <div className="flex items-center gap-3 p-3 bg-gray-100 rounded-2xl">
-          <Image src="/Component 1.png" alt="School Logo" width={40} height={40} className="rounded-full object-cover bg-gray-200" />
+          <Image src="/use_avatar.jpg" alt="School Logo" width={40} height={40} className="rounded-full object-cover bg-gray-200" />
           <div className="flex flex-col">
             <span className="text-[13px] font-semibold text-gray-900">Delhi Public School</span>
             <span className="text-xs text-gray-500 mt-0.5">Bokaro Steel City</span>
