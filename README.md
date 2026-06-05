@@ -2,9 +2,14 @@
 
 VedaAI is a full-stack, enterprise-ready AI-powered assignment generator designed to automate and elevate the educational workflow. This platform empowers educators to instantly generate highly structured question papers and assignments using advanced generative AI. 
 
-## Cloud-Native & Enterprise Architecture
+## System Architecture & Approach
 
 A primary focus of this project was engineering a robust, production-grade system capable of handling heavy concurrent AI generation loads without failure. 
+
+### Approach
+The core philosophy behind VedaAI is **asynchronous, non-blocking execution**. AI generation (via Google Gemini) and PDF rendering (via Puppeteer) are inherently slow processes. If run on the main thread, they would block incoming REST API requests, leading to server timeouts and a degraded user experience. 
+
+To solve this, we implemented an event-driven architecture using **BullMQ** and **Upstash Redis**. When a user requests an assignment, the API immediately responds with an acknowledgment and enqueues a background job. A dedicated worker processes the heavy AI tasks and uses **Socket.io** to stream real-time progress back to the client. This decouples the client from the generation process, ensuring the platform remains highly responsive.
 
 ### Fully Dockerized & Deployed on Google Cloud
 We went far beyond standard "hobby" deployments. The entire architecture—both the Next.js frontend and the Node.js/Puppeteer backend—is **fully containerized using Docker**. We utilized multi-stage Docker builds to minimize image sizes and ensure perfect parity between development and production environments. 
@@ -21,19 +26,14 @@ VedaAI is packed with high-signal features that elevate it from a simple wrapper
 ### Advanced AI Generation Engine
 - **Bloom's Taxonomy Distribution:** The AI intelligently distributes questions across different cognitive levels (Remembering, Understanding, Applying, etc.), ensuring pedagogically sound assessments rather than random generation.
 - **Strict JSON Parsing:** We strictly avoid rendering raw, unpredictable LLM responses. The Google Gemini API is forced to output a deeply nested, strictly validated JSON schema.
-- **Hierarchical Question Papers:** The generated data automatically includes defined Sections (A, B, etc.), Question Text, Difficulty Levels (Easy/Moderate/Hard), and precise Marks allocation.
 - **Context-Aware Syllabi:** Users can provide exact guidelines, subjects, and parameters, ensuring the AI output directly matches their curriculum requirements.
 
-### Version Control & Smart Regeneration
-- **Granular Version History:** Every time an educator regenerates an assignment, the system maintains a complete, persistent version tree in MongoDB. Users can seamlessly navigate back to previous iterations of a paper without losing historical data.
-- **Action Bar Regeneration:** A dedicated action bar allows users to instantly trigger smart regenerations with tweaked parameters, maintaining the core identity of the assignment while generating fresh content.
-
-### Robust Backend Flow (Queueing & WebSockets)
-- **Non-Blocking Architecture:** Heavy AI generation and intensive PDF compilation tasks are offloaded to **Upstash Redis** queues via **BullMQ**. This ensures the main server thread never blocks and handles thousands of concurrent requests.
-- **Real-Time Streaming:** We rejected lazy API polling. Instead, our **Socket.io** implementation streams live progress events (e.g., "processing", "50%", "completed") directly to the frontend, providing a highly reactive user experience.
+### Dual-Mode Output & Version Control
+- **Teacher vs. Student Mode Toggle:** Educators can instantly toggle between a "Student Mode" (just the questions) and a "Teacher Mode" (questions with detailed, AI-generated marking schemes and answers).
+- **Granular Version History:** Every time an educator regenerates an assignment, the system maintains a complete, persistent version tree in MongoDB. Users can seamlessly navigate back to previous iterations without losing historical data.
 
 ### Premium Output & UX
-- **Server-Side PDF Engine:** We completely avoided raw browser HTML printing. Instead, we implemented a dedicated **Puppeteer Microservice** on the backend that compiles the assignment into a perfectly formatted, downloadable PDF, mirroring real-world exam papers.
+- **Server-Side PDF Engine & Regeneration:** We completely avoided raw browser HTML printing. Instead, we implemented a dedicated **Puppeteer Microservice** on the backend that compiles the assignment into a beautifully formatted, downloadable PDF. If an educator updates a question or switches modes, they can hit "Regenerate PDF" to instantly compile a new physical document.
 - **Structured Rendering:** The UI renders the final assignment with a proper Student Info Header (Name, Roll Number, Section), logical groupings, and beautiful color-coded difficulty badges.
 - **Modern UI:** Built with Next.js, TailwindCSS, and Zustand for state management, providing a stunning, responsive, and intuitive interface.
 
