@@ -14,6 +14,7 @@ export const useGenerationSocket = (assignmentId: string | null) => {
   const setFailed = useAssignmentStore((state) => state.setFailed);
   const setCurrentPaper = useAssignmentStore((state) => state.setCurrentPaper);
   const jobProgress = useAssignmentStore((state) => state.jobProgress);
+  const clearError = useAssignmentStore((state) => state.clearError);
 
   useEffect(() => {
     if (!assignmentId) return;
@@ -77,5 +78,6 @@ export const useGenerationSocket = (assignmentId: string | null) => {
     error: progressObj?.error,
     pdfReady,
     pdfUrl,
+    clearError: () => assignmentId && clearError(assignmentId),
   };
 };

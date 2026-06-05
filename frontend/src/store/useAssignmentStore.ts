@@ -34,6 +34,7 @@ interface AssignmentStore {
   setJobProgress: (assignmentId: string, progress: Partial<JobProgressState>) => void;
   setPaperReady: (assignmentId: string, paperId: string) => void;
   setFailed: (assignmentId: string, error: string) => void;
+  clearError: (assignmentId: string) => void;
 }
 
 export const useAssignmentStore = create<AssignmentStore>((set) => ({
@@ -73,4 +74,18 @@ export const useAssignmentStore = create<AssignmentStore>((set) => ({
       }
     }
   })),
+  clearError: (assignmentId) => set((state) => {
+    const progress = state.jobProgress[assignmentId];
+    if (!progress) return state;
+    return {
+      jobProgress: {
+        ...state.jobProgress,
+        [assignmentId]: {
+          ...progress,
+          error: undefined,
+          status: 'pending'
+        }
+      }
+    };
+  }),
 }));

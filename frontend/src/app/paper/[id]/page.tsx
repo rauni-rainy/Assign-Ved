@@ -18,7 +18,7 @@ export default function PaperPage() {
   const [loading, setLoading] = useState(true);
   const [showAnswers, setShowAnswers] = useState(false);
 
-  const { isComplete, step, error, percentage } = useGenerationSocket(assignmentId);
+  const { isComplete, step, error, percentage, clearError } = useGenerationSocket(assignmentId);
 
   const loadPaper = async () => {
     try {
@@ -52,6 +52,7 @@ export default function PaperPage() {
   const handleRegenerate = async () => {
     if (paper?._id || assignmentId) {
       try {
+        clearError();
         setPaper({ ...paper, status: 'generating' });
         await regenerate(paper?._id || assignmentId);
       } catch (e) {
