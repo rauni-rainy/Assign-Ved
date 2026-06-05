@@ -5,9 +5,10 @@ const socket_io_1 = require("socket.io");
 const env_1 = require("../config/env");
 let io;
 const initSocketServer = (httpServer) => {
+    const allowedOrigins = env_1.env.FRONTEND_URL.split(',').map((url) => url.trim());
     io = new socket_io_1.Server(httpServer, {
         cors: {
-            origin: env_1.env.FRONTEND_URL,
+            origin: allowedOrigins,
             methods: ['GET', 'POST'],
             credentials: true,
         }

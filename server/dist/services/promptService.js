@@ -38,7 +38,7 @@ const buildUserPrompt = (assignment) => {
         prompt += `- Generate exactly ${qt.count} ${qt.type} questions worth ${qt.marksEach} marks each\n`;
     });
     prompt += `\n- Distribute difficulty as: 30% easy, 50% medium, 20% hard\n`;
-    prompt += `- Assign appropriate Bloom's taxonomy levels (remember, understand, apply, analyze, evaluate, create)\n`;
+    prompt += `- Assign appropriate Bloom's taxonomy levels strictly choosing from exactly one of: remember, understand, apply, analyze, evaluate, create\n`;
     prompt += `- Group questions into sections: Section A for objective/fill-blank, Section B for short answer, Section C for long answer. Each section must have a title and an instruction line.\n`;
     if (assignment.additionalInstructions) {
         prompt += `- Additional teacher instructions: ${assignment.additionalInstructions}\n`;

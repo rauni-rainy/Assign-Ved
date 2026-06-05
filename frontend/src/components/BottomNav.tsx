@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 export default function BottomNav({ isInline = false }: { isInline?: boolean }) {
   const pathname = usePathname();
   
-  if (!isInline && (pathname === '/create' || pathname === '/')) {
+  if (!isInline && pathname === '/create') {
     return null;
   }
   
@@ -16,8 +16,8 @@ export default function BottomNav({ isInline = false }: { isInline?: boolean }) 
   return (
     <div className={wrapperClass}>
       {pathname !== '/create' && (
-        <div className="flex justify-end mb-4 pr-2">
-          <Link href="/create" className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-[0_4px_15px_rgba(0,0,0,0.1)] pointer-events-auto active:scale-95 transition-transform no-underline">
+        <div className="flex justify-end mb-4 md:pr-2 w-full max-w-[373px] mx-auto pointer-events-none">
+          <Link href="/create" className="w-[56px] h-[56px] bg-white rounded-full flex items-center justify-center shadow-[0_4px_15px_rgba(0,0,0,0.1)] pointer-events-auto active:scale-95 transition-transform no-underline relative right-2">
             <span className="material-symbols-rounded text-[#FF6B00] text-3xl font-light">add</span>
           </Link>
         </div>

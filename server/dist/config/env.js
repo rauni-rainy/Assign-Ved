@@ -1,13 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.env = void 0;
+require("dotenv/config");
 const zod_1 = require("zod");
 const envSchema = zod_1.z.object({
     PORT: zod_1.z.string().default('3001'),
     MONGODB_URI: zod_1.z.string().url(),
     REDIS_URL: zod_1.z.string().url(),
     GEMINI_API_KEY: zod_1.z.string().min(1),
-    FRONTEND_URL: zod_1.z.string().url(),
+    FRONTEND_URL: zod_1.z.string().min(1), // Can be comma-separated URLs
     PDF_OUTPUT_DIR: zod_1.z.string().default('./pdfs'),
     MAX_JOBS_PER_HOUR: zod_1.z.coerce.number().default(100),
     NODE_ENV: zod_1.z.enum(['development', 'production', 'test']).default('development'),

@@ -9,9 +9,18 @@ import questionPaperRoutes from './routes/questionPapers';
 
 const app = express();
 
+// Parse FRONTEND_URL to support multiple comma-separated domains
+const allowedOrigins = env.FRONTEND_URL.split(',').map((url) => url.trim());
+
 // Middleware
 app.use(cors({
-  origin: env.FRONTEND_URL,
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));

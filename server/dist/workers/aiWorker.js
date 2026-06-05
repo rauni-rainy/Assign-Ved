@@ -36,19 +36,53 @@ exports.aiWorker = new bullmq_1.Worker('question-generation', async (job) => {
         setTimeout(() => emitProgress('Finalizing paper', 85), 2000);
         // 4. Call aiService.generatePaper(assignment)
         const aiResult = await aiService_1.aiService.generatePaper(assignment);
+        // Calculate duration logically: 1 mark = 2 mins
+        const totalMins = (assignment.totalMarks || 100) * 2;
+        const hours = Math.floor(totalMins / 60);
+        const mins = totalMins % 60;
+        const timeParts = [];
+        if (hours > 0)
+            timeParts.push(`${hours} Hour${hours > 1 ? 's' : ''}`);
+        if (mins > 0)
+            timeParts.push(`${mins} Mins`);
+        const calculatedDuration = timeParts.join(' ') || '1 Hour';
         // 6. Validate structure, save QuestionPaper
-        const paper = new QuestionPaper_1.QuestionPaper({
-            assignmentId: assignment._id,
-            sections: aiResult.sections || [],
-            metadata: {
+        let paper = await QuestionPaper_1.QuestionPaper.findOne({ assignmentId: assignment._id, status: 'generating' }).sort({ version: -1 });
+        if (paper) {
+            paper.sections = aiResult.sections || [];
+            paper.metadata = {
                 school: 'Delhi Public School',
                 totalMarks: assignment.totalMarks,
-                generatedAt: new Date()
-            },
-            generationPrompt: aiResult.generationPrompt,
-            rawAIResponse: aiResult.rawAIResponse,
-            status: 'ready'
-        });
+                generatedAt: new Date(),
+                title: assignment.title,
+                subject: assignment.subject,
+                grade: assignment.grade,
+                dueDate: assignment.dueDate,
+                duration: calculatedDuration
+            };
+            paper.generationPrompt = aiResult.generationPrompt;
+            paper.rawAIResponse = aiResult.rawAIResponse;
+            paper.status = 'ready';
+        }
+        else {
+            paper = new QuestionPaper_1.QuestionPaper({
+                assignmentId: assignment._id,
+                sections: aiResult.sections || [],
+                metadata: {
+                    school: 'Delhi Public School',
+                    totalMarks: assignment.totalMarks,
+                    generatedAt: new Date(),
+                    title: assignment.title,
+                    subject: assignment.subject,
+                    grade: assignment.grade,
+                    dueDate: assignment.dueDate,
+                    duration: calculatedDuration
+                },
+                generationPrompt: aiResult.generationPrompt,
+                rawAIResponse: aiResult.rawAIResponse,
+                status: 'ready'
+            });
+        }
         await paper.save();
         // 7. Update assignment.status = 'completed'
         assignment.status = 'completed';

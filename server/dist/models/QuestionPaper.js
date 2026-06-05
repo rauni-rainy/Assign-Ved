@@ -73,15 +73,18 @@ const QuestionPaperSchema = new mongoose_1.Schema({
     sections: [SectionSchema],
     metadata: {
         school: { type: String, default: 'Delhi Public School' },
+        title: { type: String },
         subject: { type: String },
         grade: { type: String },
         totalMarks: { type: Number },
         duration: { type: String },
         generatedAt: { type: Date, default: Date.now },
+        dueDate: { type: Date },
     },
     generationPrompt: { type: String, select: false },
     rawAIResponse: { type: String, select: false },
     pdfPath: { type: String },
+    teacherPdfPath: { type: String },
     status: {
         type: String,
         enum: ['generating', 'ready', 'pdf_ready'],

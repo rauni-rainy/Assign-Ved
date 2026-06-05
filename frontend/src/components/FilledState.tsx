@@ -118,7 +118,7 @@ export default function FilledState() {
       </div>
 
       {/* Grid */}
-      <div className="flex-1 overflow-y-auto px-4 md:px-6 pb-4 md:pb-32 no-scrollbar">
+      <div className="flex-1 overflow-y-auto px-4 md:px-6 pb-40 md:pb-32 no-scrollbar">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
           {filteredAndSortedAssignments.map((item, i) => (
             <AssignmentCard 
@@ -131,11 +131,6 @@ export default function FilledState() {
               onDelete={handleDelete}
             />
           ))}
-        </div>
-        
-        {/* Inline BottomNav for Mobile */}
-        <div className="mt-8 mb-4 md:hidden">
-          <BottomNav isInline={true} />
         </div>
       </div>
 

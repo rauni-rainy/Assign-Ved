@@ -36,12 +36,29 @@ export type QuestionPaperData = {
 export const aiService = {
   generatePaper: async (assignment: IAssignment): Promise<QuestionPaperData> => {
     const userPrompt = buildUserPrompt(assignment);
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-3.5-flash'
-    });
-
+    const modelsToTry = ['gemini-3.5-flash', 'gemini-1.5-flash', 'gemini-flash-latest'];
     const combinedPrompt = `${SYSTEM_PROMPT}\n\n${userPrompt}`;
-    const result = await model.generateContent(combinedPrompt);
+    
+    let result: any;
+    let lastError: any;
+
+    for (const modelName of modelsToTry) {
+      try {
+        const model = genAI.getGenerativeModel({ model: modelName });
+        result = await model.generateContent(combinedPrompt);
+        console.log(`Successfully generated paper using model: ${modelName}`);
+        break;
+      } catch (error: any) {
+        console.error(`Gemini API Error with model ${modelName}: ${error.message}`);
+        lastError = error;
+        // Wait before trying the next model to avoid instant rate limit hits
+        await new Promise(res => setTimeout(res, 2000));
+      }
+    }
+    if (!result) {
+      throw lastError || new Error('Failed to generate content with all fallback models');
+    }
+
     const rawText = result.response.text();
     
     if (!rawText) {

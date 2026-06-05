@@ -42,7 +42,7 @@ const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
 const env_1 = require("../config/env");
 exports.pdfService = {
-    generate: async (paper) => {
+    generate: async (paper, includeAnswers = false) => {
         const assignment = paper.assignmentId;
         const metadata = paper.metadata;
         let html = `
@@ -75,6 +75,7 @@ exports.pdfService = {
         .options-list { list-style-type: lower-alpha; margin-top: 5px; margin-bottom: 5px; padding-left: 20px; }
         .dotted-lines { border-bottom: 1px dotted #999; margin-top: 25px; width: 100%; height: 1px; }
         .badge { font-size: 8pt; color: #666; background: #eee; padding: 2px 6px; border-radius: 4px; margin-left: 5px; }
+        .expected-answer { margin-top: 10px; background: #f0fdf4; border: 1px solid #dcfce7; padding: 10px; border-radius: 8px; color: #166534; font-size: 11pt; }
       </style>
     </head>
     <body>
@@ -118,14 +119,19 @@ exports.pdfService = {
                     });
                     html += `</ol>`;
                 }
-                else if (q.type === 'ShortAnswer') {
-                    html += `<div class="dotted-lines"></div>`.repeat(3);
+                else if (!includeAnswers) {
+                    if (q.type === 'ShortAnswer') {
+                        html += `<div class="dotted-lines"></div>`.repeat(3);
+                    }
+                    else if (q.type === 'LongAnswer') {
+                        html += `<div class="dotted-lines"></div>`.repeat(8);
+                    }
+                    else if (q.type === 'FillBlank') {
+                        html += `<div class="dotted-lines"></div>`;
+                    }
                 }
-                else if (q.type === 'LongAnswer') {
-                    html += `<div class="dotted-lines"></div>`.repeat(8);
-                }
-                else if (q.type === 'FillBlank') {
-                    html += `<div class="dotted-lines"></div>`;
+                if (includeAnswers && q.expectedAnswer) {
+                    html += `<div class="expected-answer"><b>Expected Answer:</b> ${q.expectedAnswer}</div>`;
                 }
                 html += `</div>`;
                 globalQuestionNum++;
@@ -138,10 +144,11 @@ exports.pdfService = {
         if (!fs.existsSync(outputDir)) {
             fs.mkdirSync(outputDir, { recursive: true });
         }
-        const fileName = `${paper._id}.pdf`;
+        const fileName = includeAnswers ? `${paper._id}-teacher.pdf` : `${paper._id}.pdf`;
         const outputPath = path.join(outputDir, fileName);
         const browser = await puppeteer_1.default.launch({
             headless: true,
+            executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
             args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
         const page = await browser.newPage();

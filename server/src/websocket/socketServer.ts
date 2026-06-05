@@ -4,9 +4,11 @@ import { env } from '../config/env';
 let io: Server;
 
 export const initSocketServer = (httpServer: any) => {
+  const allowedOrigins = env.FRONTEND_URL.split(',').map((url) => url.trim());
+
   io = new Server(httpServer, {
     cors: {
-      origin: env.FRONTEND_URL,
+      origin: allowedOrigins,
       methods: ['GET', 'POST'],
       credentials: true,
     }

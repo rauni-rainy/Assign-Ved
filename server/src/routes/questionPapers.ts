@@ -62,19 +62,30 @@ router.get('/:id/with-answers', async (req, res, next) => {
 
 router.post('/:id/regenerate', async (req, res, next) => {
   try {
+    let assignmentId;
+    let version = 1;
+
     const oldPaper = await QuestionPaper.findById(req.params.id);
-    if (!oldPaper) {
-      return res.status(404).json({ success: false, message: 'Paper not found' });
+    if (oldPaper) {
+      assignmentId = oldPaper.assignmentId;
+      version = oldPaper.version + 1;
+    } else {
+      const { Assignment } = await import('../models/Assignment');
+      const assignment = await Assignment.findById(req.params.id);
+      if (!assignment) {
+        return res.status(404).json({ success: false, message: 'Paper or Assignment not found' });
+      }
+      assignmentId = assignment._id;
     }
 
     const newPaper = new QuestionPaper({
-      assignmentId: oldPaper.assignmentId,
-      version: oldPaper.version + 1,
+      assignmentId: assignmentId,
+      version: version,
       status: 'generating'
     });
     await newPaper.save();
 
-    const job = await addGenerationJob(oldPaper.assignmentId.toString());
+    const job = await addGenerationJob(assignmentId.toString());
 
     res.status(202).json({ success: true, jobId: job.id });
   } catch (error) {

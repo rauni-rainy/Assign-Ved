@@ -13,9 +13,18 @@ const assignments_1 = __importDefault(require("./routes/assignments"));
 const questionPapers_1 = __importDefault(require("./routes/questionPapers"));
 const app = (0, express_1.default)();
 exports.app = app;
+// Parse FRONTEND_URL to support multiple comma-separated domains
+const allowedOrigins = env_1.env.FRONTEND_URL.split(',').map((url) => url.trim());
 // Middleware
 app.use((0, cors_1.default)({
-    origin: env_1.env.FRONTEND_URL,
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));

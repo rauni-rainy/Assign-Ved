@@ -40,7 +40,8 @@ const assignmentSchema = zod_1.z.object({
         count: zod_1.z.number().min(1).max(50),
         marksEach: zod_1.z.number().min(1).max(20)
     })).min(1)),
-    additionalInstructions: zod_1.z.string().optional()
+    additionalInstructions: zod_1.z.string().optional(),
+    dueDate: zod_1.z.string().optional().transform(val => val ? new Date(val) : undefined)
 });
 router.post('/', upload.single('file'), async (req, res, next) => {
     try {
@@ -50,8 +51,13 @@ router.post('/', upload.single('file'), async (req, res, next) => {
         if (req.file) {
             uploadedFileName = req.file.originalname;
             if (req.file.mimetype === 'application/pdf') {
-                const pdfData = await (0, pdf_parse_1.default)(req.file.buffer);
-                uploadedFileContent = pdfData.text;
+                try {
+                    const pdfData = await (0, pdf_parse_1.default)(req.file.buffer);
+                    uploadedFileContent = pdfData.text;
+                }
+                catch (err) {
+                    return res.status(400).json({ success: false, message: 'Invalid or corrupt PDF file uploaded. Please ensure the file is a valid PDF.' });
+                }
             }
             else {
                 uploadedFileContent = req.file.buffer.toString('utf-8');

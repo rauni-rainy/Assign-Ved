@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import DashboardLayout from "@/components/DashboardLayout";
 import DocumentWrapper from "@/components/Output/DocumentWrapper";
 import PaperHeader from "@/components/Output/PaperHeader";
@@ -19,6 +19,28 @@ export default function PaperPage() {
   const [showAnswers, setShowAnswers] = useState(false);
 
   const { isComplete, step, error, percentage, clearError } = useGenerationSocket(assignmentId);
+
+  const [interactiveText, setInteractiveText] = useState("Preparing your document...");
+  
+  useEffect(() => {
+    if (paper?.status === 'generating' || !paper) {
+      const phrases = [
+        "Hang on, loading content...",
+        "Structuring questions...",
+        "Adding final touches...",
+        "Improving margins...",
+        "Cross-checking data...",
+        "Formatting your paper...",
+        "Almost there..."
+      ];
+      let i = 0;
+      const interval = setInterval(() => {
+        i = (i + 1) % phrases.length;
+        setInteractiveText(phrases[i]);
+      }, 2500);
+      return () => clearInterval(interval);
+    }
+  }, [paper?.status, paper]);
 
   const loadPaper = async () => {
     try {
@@ -68,15 +90,23 @@ export default function PaperPage() {
   if (error) {
     return (
       <DashboardLayout activeTab="Home" title="Generation Failed">
-        <div className="p-8 flex flex-col items-center justify-center text-center">
-          <div className="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mb-4">
-            <span className="material-symbols-rounded text-3xl">error</span>
+        <div className="p-8 flex flex-col items-center justify-center text-center h-[60vh]">
+          <div className="w-20 h-20 bg-red-50 border-[6px] border-red-100 text-red-500 rounded-full flex items-center justify-center mb-6 shadow-sm">
+            <span className="material-symbols-rounded text-4xl">error</span>
           </div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Failed to generate paper</h2>
-          <p className="text-gray-500 mb-6 max-w-md">{error}</p>
-          <button onClick={handleRegenerate} className="bg-gray-900 text-white px-6 py-2.5 rounded-full font-medium hover:bg-black transition-colors">
-            Try Again
-          </button>
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">Generation Interrupted</h2>
+          <div className="bg-red-50 text-red-700 px-6 py-4 rounded-xl mb-8 max-w-md w-full border border-red-100 shadow-sm">
+            <p className="font-medium text-sm">{error || "An unexpected error occurred while generating your paper."}</p>
+            <p className="text-xs text-red-500 mt-2">Please check your inputs and try again, or contact support if the issue persists.</p>
+          </div>
+          <div className="flex gap-4">
+            <button onClick={() => window.history.back()} className="bg-white border border-gray-300 text-gray-700 px-6 py-2.5 rounded-full font-medium hover:bg-gray-50 transition-colors">
+              Go Back
+            </button>
+            <button onClick={handleRegenerate} className="bg-gray-900 text-white px-6 py-2.5 rounded-full font-medium hover:bg-black transition-colors shadow-md hover:shadow-lg">
+              Try Again
+            </button>
+          </div>
         </div>
       </DashboardLayout>
     );
@@ -86,9 +116,24 @@ export default function PaperPage() {
     return (
       <DashboardLayout activeTab="Home" title="Generating">
         <div className="p-8 flex flex-col items-center justify-center h-[60vh]">
-          <div className="w-12 h-12 border-4 border-gray-200 border-t-green-400 rounded-full animate-spin mb-6"></div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Generating Question Paper</h2>
-          <p className="text-gray-500 font-medium mb-4">{step} ({percentage}%)</p>
+          <div className="relative mb-8">
+            <div className="w-16 h-16 border-4 border-gray-100 border-t-blue-500 border-r-purple-500 rounded-full animate-spin shadow-lg"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-[10px] font-bold text-gray-600">{percentage}%</span>
+            </div>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2 tracking-tight">Generating Question Paper</h2>
+          <p className="text-blue-600 font-medium mb-1 text-lg">{step}</p>
+          <p className="text-gray-400 font-medium text-sm animate-pulse h-6 flex items-center justify-center transition-all duration-300">
+            {interactiveText}
+          </p>
+          
+          <div className="w-64 bg-gray-100 rounded-full h-1.5 mt-8 overflow-hidden">
+            <div 
+              className="bg-gradient-to-r from-blue-500 to-purple-500 h-1.5 rounded-full transition-all duration-700 ease-out" 
+              style={{ width: `${percentage}%` }}
+            />
+          </div>
         </div>
       </DashboardLayout>
     );

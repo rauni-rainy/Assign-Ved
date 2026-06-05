@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const BASE_URL = 'https://veda-server-170572969444.us-central1.run.app';
 
 class APIError extends Error {
   code?: number;
