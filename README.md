@@ -31,6 +31,8 @@ VedaAI is packed with high-signal features that elevate it from a simple wrapper
 ### Dual-Mode Output & Version Control
 - **Teacher vs. Student Mode Toggle:** Educators can instantly toggle between a "Student Mode" (just the questions) and a "Teacher Mode" (questions with detailed, AI-generated marking schemes and answers).
 - **Granular Version History:** Every time an educator regenerates an assignment, the system maintains a complete, persistent version tree in MongoDB. Users can seamlessly navigate back to previous iterations without losing historical data.
+<img width="1391" height="262" alt="Screenshot 2026-06-06 035022" src="https://github.com/user-attachments/assets/22314ab3-a375-4c79-9a68-ce64442d91b6" />
+<img width="1167" height="773" alt="Screenshot 2026-06-06 035042" src="https://github.com/user-attachments/assets/16e749a6-64b4-421b-9048-9cb818a7912b" />
 
 ### Premium Output & UX
 - **Server-Side PDF Engine & Regeneration:** We completely avoided raw browser HTML printing. Instead, we implemented a dedicated **Puppeteer Microservice** on the backend that compiles the assignment into a beautifully formatted, downloadable PDF. If an educator updates a question or switches modes, they can hit "Regenerate PDF" to instantly compile a new physical document.
