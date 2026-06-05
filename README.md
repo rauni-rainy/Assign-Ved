@@ -35,7 +35,7 @@ VedaAI is packed with high-signal features that elevate it from a simple wrapper
 ### Premium Output & UX
 - **Server-Side PDF Engine:** We completely avoided raw browser HTML printing. Instead, we implemented a dedicated **Puppeteer Microservice** on the backend that compiles the assignment into a perfectly formatted, downloadable PDF, mirroring real-world exam papers.
 - **Structured Rendering:** The UI renders the final assignment with a proper Student Info Header (Name, Roll Number, Section), logical groupings, and beautiful color-coded difficulty badges.
-- **Modern Glassmorphism UI:** Built with Next.js, TailwindCSS, and Zustand for state management, providing a stunning, responsive, and intuitive interface.
+- **Modern UI:** Built with Next.js, TailwindCSS, and Zustand for state management, providing a stunning, responsive, and intuitive interface.
 
 ---
 
@@ -52,13 +52,22 @@ We have meticulously designed the architecture to meet and exceed the core requi
 
 ## Screenshots
 
-(Add your screenshots here. You can drag and drop images directly into GitHub)
+
 
 | Dashboard | Assignment Creator | Generated PDF |
 | :---: | :---: | :---: |
-| [Screenshot 1 Placeholder] | [Screenshot 2 Placeholder] | [Screenshot 3 Placeholder] |
+| <img width="1912" height="971" alt="Screenshot 2026-06-06 033355" src="https://github.com/user-attachments/assets/fc1be700-ee58-4ddc-aeaf-e0b85c4d20e4" />
+ |<img width="1912" height="977" alt="Screenshot 2026-06-06 033437" src="https://github.com/user-attachments/assets/4e47d80c-b30d-4fb5-b7e5-fc66750a9b2d" /> 
+ | <img width="1918" height="972" alt="Screenshot 2026-06-06 033903" src="https://github.com/user-attachments/assets/b8992a2b-98c4-4ddb-b179-72506fba1096" />
+ |
 
 ---
+
+<img width="1481" height="802" alt="Screenshot 2026-06-06 033527" src="https://github.com/user-attachments/assets/1b21e558-44c2-453c-bbda-be37aa08c838" />
+<img width="1920" height="1080" alt="Screenshot 2026-06-06 033714" src="https://github.com/user-attachments/assets/4360b1cf-43fd-4452-96f4-a432f5d83c5d" />
+<img width="1918" height="912" alt="Screenshot 2026-06-06 033927" src="https://github.com/user-attachments/assets/b00fc703-dc40-45fd-97d0-6a5db32e2149" />
+<img width="1916" height="947" alt="Screenshot 2026-06-06 033946" src="https://github.com/user-attachments/assets/7d57c9ac-2d54-4fb8-a768-de9e47b56938" />
+
 
 ## Prerequisites
 
