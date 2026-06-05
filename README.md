@@ -19,20 +19,23 @@ The application is natively deployed on **Google Cloud Run**, an enterprise-grad
 VedaAI is packed with high-signal features that elevate it from a simple wrapper to a complete product.
 
 ### Advanced AI Generation Engine
+- **Bloom's Taxonomy Distribution:** The AI intelligently distributes questions across different cognitive levels (Remembering, Understanding, Applying, etc.), ensuring pedagogically sound assessments rather than random generation.
 - **Strict JSON Parsing:** We strictly avoid rendering raw, unpredictable LLM responses. The Google Gemini API is forced to output a deeply nested, strictly validated JSON schema.
 - **Hierarchical Question Papers:** The generated data automatically includes defined Sections (A, B, etc.), Question Text, Difficulty Levels (Easy/Moderate/Hard), and precise Marks allocation.
 - **Context-Aware Syllabi:** Users can provide exact guidelines, subjects, and parameters, ensuring the AI output directly matches their curriculum requirements.
 
+### Version Control & Smart Regeneration
+- **Granular Version History:** Every time an educator regenerates an assignment, the system maintains a complete, persistent version tree in MongoDB. Users can seamlessly navigate back to previous iterations of a paper without losing historical data.
+- **Action Bar Regeneration:** A dedicated action bar allows users to instantly trigger smart regenerations with tweaked parameters, maintaining the core identity of the assignment while generating fresh content.
+
 ### Robust Backend Flow (Queueing & WebSockets)
 - **Non-Blocking Architecture:** Heavy AI generation and intensive PDF compilation tasks are offloaded to **Upstash Redis** queues via **BullMQ**. This ensures the main server thread never blocks and handles thousands of concurrent requests.
 - **Real-Time Streaming:** We rejected lazy API polling. Instead, our **Socket.io** implementation streams live progress events (e.g., "processing", "50%", "completed") directly to the frontend, providing a highly reactive user experience.
-- **Persistent Storage:** MongoDB Atlas (Mongoose) reliably stores all historical assignments, user data, and metadata.
 
 ### Premium Output & UX
 - **Server-Side PDF Engine:** We completely avoided raw browser HTML printing. Instead, we implemented a dedicated **Puppeteer Microservice** on the backend that compiles the assignment into a perfectly formatted, downloadable PDF, mirroring real-world exam papers.
 - **Structured Rendering:** The UI renders the final assignment with a proper Student Info Header (Name, Roll Number, Section), logical groupings, and beautiful color-coded difficulty badges.
 - **Modern Glassmorphism UI:** Built with Next.js, TailwindCSS, and Zustand for state management, providing a stunning, responsive, and intuitive interface.
-- **Dynamic Content:** Real-time generation trackers, animated loaders, and seamless state transitions across the application.
 
 ---
 
