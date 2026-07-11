@@ -3,7 +3,7 @@ import { io, Socket } from 'socket.io-client';
 import { useAssignmentStore } from '../store/useAssignmentStore';
 import { fetchQuestionPaper } from '../lib/api';
 
-const SOCKET_URL = 'https://veda-server-170572969444.us-central1.run.app';
+const SOCKET_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 export const useGenerationSocket = (assignmentId: string | null) => {
   const [pdfReady, setPdfReady] = useState(false);
