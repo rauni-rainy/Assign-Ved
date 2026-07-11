@@ -1,0 +1,25 @@
+services:
+  - type: redis
+    name: veda-redis
+    ipAllowList: [] # Allow all IP addresses (Render private network will securely route this)
+    plan: free # Render free tier for Redis (cache only, not durable)
+    maxmemoryPolicy: noeviction
+
+  - type: web
+    name: veda-backend
+    env: docker
+    rootDir: server
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: veda-redis
+          property: connectionString
+      - key: MONGODB_URI
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
