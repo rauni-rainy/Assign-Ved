@@ -1,13 +1,13 @@
-# VedaAI - Next-Generation AI Teacher's Toolkit
+# Vedum AI - Next-Generation AI Teacher's Toolkit
 
-VedaAI is a full-stack, enterprise-ready AI-powered assignment generator designed to automate and elevate the educational workflow. This platform empowers educators to instantly generate highly structured question papers and assignments using advanced generative AI. 
+Vedum AI is a full-stack, enterprise-ready AI-powered assignment generator designed to automate and elevate the educational workflow. This platform empowers educators to instantly generate highly structured question papers and assignments using advanced generative AI. 
 
 ## System Architecture & Approach
 
 A primary focus of this project was engineering a robust, production-grade system capable of handling heavy concurrent AI generation loads without failure. 
 
 ### Approach
-The core philosophy behind VedaAI is **asynchronous, non-blocking execution**. AI generation (via Google Gemini) and PDF rendering (via Puppeteer) are inherently slow processes. If run on the main thread, they would block incoming REST API requests, leading to server timeouts and a degraded user experience. 
+The core philosophy behind Vedum AI is **asynchronous, non-blocking execution**. AI generation (via Google Gemini) and PDF rendering (via Puppeteer) are inherently slow processes. If run on the main thread, they would block incoming REST API requests, leading to server timeouts and a degraded user experience. 
 
 To solve this, we implemented an event-driven architecture using **BullMQ** and **Upstash Redis**. When a user requests an assignment, the API immediately responds with an acknowledgment and enqueues a background job. A dedicated worker processes the heavy AI tasks and uses **Socket.io** to stream real-time progress back to the client. This decouples the client from the generation process, ensuring the platform remains highly responsive.
 
@@ -21,7 +21,7 @@ The application is natively deployed on **Google Cloud Run**, an enterprise-grad
 
 ## Comprehensive Feature Suite
 
-VedaAI is packed with high-signal features that elevate it from a simple wrapper to a complete product.
+Vedum AI is packed with high-signal features that elevate it from a simple wrapper to a complete product.
 
 ### Advanced AI Generation Engine
 - **Bloom's Taxonomy Distribution:** The AI intelligently distributes questions across different cognitive levels (Remembering, Understanding, Applying, etc.), ensuring pedagogically sound assessments rather than random generation.

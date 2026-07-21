@@ -5,7 +5,7 @@ import "./globals.css";
 const bricolage = Bricolage_Grotesque({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "VedaAI - Assignment",
+  title: "Vedum AI - Assignment",
   description: "Assignment Page",
 };
 

@@ -30,8 +30,7 @@ export default function Sidebar({
     <aside className="hidden md:flex w-[280px] h-full bg-white rounded-2xl flex-col justify-between p-6 shadow-sm flex-shrink-0 z-10">
       <div className="flex flex-col gap-6">
         <div className="flex items-center gap-3 pl-3">
-          <Image src="/sidebar-logo.png" alt="VedaAI Logo" width={32} height={32} className="object-contain" />
-          <span className="text-[22px] font-bold text-gray-900 tracking-tight">VedaAI</span>
+          <span className="text-[22px] font-bold text-gray-900 tracking-tight">Vedum AI</span>
         </div>
 
         <Link href={primaryActionHref} className="bg-[#2D3035] text-white border-2 border-[#F97316] rounded-full py-3 px-5 flex items-center justify-center gap-2 text-sm font-semibold cursor-pointer shadow-[0_0_10px_rgba(249,115,22,0.2)] hover:bg-[#1F2937] hover:shadow-[0_0_15px_rgba(249,115,22,0.4)] transition-all mx-1 no-underline">
@@ -72,7 +71,6 @@ export default function Sidebar({
           Settings
         </Link>
         <div className="flex items-center gap-3 p-3 bg-gray-100 rounded-2xl">
-          <Image src="/use_avatar.jpg" alt="School Logo" width={40} height={40} className="rounded-full object-cover bg-gray-200" />
           <div className="flex flex-col">
             <span className="text-[13px] font-semibold text-gray-900">Delhi Public School</span>
             <span className="text-xs text-gray-500 mt-0.5">Bokaro Steel City</span>
